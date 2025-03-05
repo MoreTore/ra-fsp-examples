@@ -141,14 +141,16 @@ void hal_entry(void)
             {
                 if(b_usb_attach)
                 {
-                    err = R_USB_Read (&g_basic0_ctrl, g_buf, READ_BUF_SIZE, USB_CLASS_PCDC);
-                }
-                /* Handle error */
-                if (FSP_SUCCESS != err)
-                {
-                    /* Turn ON RED LED to indicate fatal error */
-                    TURN_RED_ON
-                    APP_ERR_TRAP(err);
+                    for (int i = 0; i<1000; i++) {
+                        err = R_USB_Read (&g_basic0_ctrl, g_buf, READ_BUF_SIZE, USB_CLASS_PCDC); // After this is finished, the usb does not recv data.
+                        /* Handle error */
+                        if (FSP_SUCCESS != err)
+                        {
+                            /* Turn ON RED LED to indicate fatal error */
+                            TURN_RED_ON
+                            APP_ERR_TRAP(err);
+                        }
+                    }
                 }
 
                 /* Switch case evaluation of user input */
@@ -299,6 +301,8 @@ static fsp_err_t print_to_console(char *p_data)
     }
     return err;
 }
+
+
 
 /*****************************************************************************************************************
  *  @brief      Check for write completion
